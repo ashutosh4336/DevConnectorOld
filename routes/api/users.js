@@ -1,5 +1,6 @@
 const express = require('express');
 const router = express.Router();
+const gravatar = require('gravatar');
 const { check, validationResult } = require('express-validator/check');
 
 // Load User Models
@@ -20,7 +21,7 @@ router.post(
       'Please Enter a Password with Minimum Length of 6'
     ).isLength({ min: 6 })
   ],
-  (req, res) => {
+  async (req, res) => {
     const errors = validationResult(req);
     if (!errors.isEmpty()) {
       return res.status(400).json({ errors: errors.array() });
@@ -28,7 +29,25 @@ router.post(
     // console.log(req.body);
     const { name, email, password } = req.body;
 
-    res.send('User Route');
+    try {
+      //See If Users Exits
+      let user = await User.findOne({ email });
+
+      if (user) {
+        res.ststus(400).json({ errors: [{ msg: 'User already Exits' }] });
+      }
+
+      //Get Users Gravatar
+
+      //Encrypt the Password
+
+      //Return JSONWEBTOKEN
+
+      res.send('User Route');
+    } catch (err) {
+      console.err(err.meassge);
+      res.status(500).send('Server Error');
+    }
   }
 );
 
