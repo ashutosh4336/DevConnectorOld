@@ -1,6 +1,7 @@
 const express = require('express');
 const router = express.Router();
 const gravatar = require('gravatar');
+const bcrypt = require('bcryptjs');
 const { check, validationResult } = require('express-validator/check');
 
 // Load User Models
@@ -38,14 +39,32 @@ router.post(
       }
 
       //Get Users Gravatar
+      const avatar = gravatar.url(email, {
+        s: '200',
+        r: 'pg',
+        d: 'mm'
+      });
+
+      user = new User({
+        name,
+        email,
+        avatar,
+        password
+      });
 
       //Encrypt the Password
 
+      const salt = await bcrypt.genSalt(10);
+      user.password = await bcrypt.hash(password, salt);
+
+      //save user to databse
+      await user.save();
+
       //Return JSONWEBTOKEN
 
-      res.send('User Route');
+      res.send('User Registered');
     } catch (err) {
-      console.err(err.meassge);
+      console.error(err.message);
       res.status(500).send('Server Error');
     }
   }
