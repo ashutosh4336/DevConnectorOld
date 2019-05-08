@@ -2,6 +2,8 @@ const express = require('express');
 const router = express.Router();
 const gravatar = require('gravatar');
 const bcrypt = require('bcryptjs');
+const jwt = require('jsonwebtoken');
+const config = require('config');
 const { check, validationResult } = require('express-validator/check');
 
 // Load User Models
@@ -35,7 +37,9 @@ router.post(
       let user = await User.findOne({ email });
 
       if (user) {
-        res.ststus(400).json({ errors: [{ msg: 'User already Exits' }] });
+        return res
+          .status(400)
+          .json({ errors: [{ msg: 'User already Exits' }] });
       }
 
       //Get Users Gravatar
@@ -62,7 +66,23 @@ router.post(
 
       //Return JSONWEBTOKEN
 
-      res.send('User Registered');
+      const payload = {
+        user: {
+          id: user.id
+        }
+      };
+
+      jwt.sign(
+        payload,
+        config.get('jwtSecret'),
+        { expiresIn: 3600 },
+        (err, token) => {
+          if (err) throw err;
+          res.json({ token });
+        }
+      );
+
+      // res.send('User Registered');
     } catch (err) {
       console.error(err.message);
       res.status(500).send('Server Error');

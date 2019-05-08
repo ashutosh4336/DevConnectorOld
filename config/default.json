@@ -1,3 +1,4 @@
 {
-  "mongoURI": "mongodb+srv://ashutosh:pinky4336@devconnector-ewcho.mongodb.net/test?retryWrites=true"
+  "mongoURI": "mongodb+srv://ashutosh:pinky4336@devconnector-ewcho.mongodb.net/test?retryWrites=true",
+  "jwtSecret": "PwnDev"
 }
