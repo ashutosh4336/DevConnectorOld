@@ -19,6 +19,9 @@ router.post(
       .not()
       .isEmpty(),
     check('email', 'Please Enter a Valid Email').isEmail(),
+    // check('handle', 'Please Enter a Username')
+    //   .not()
+    //   .isEmpty(),
     check(
       'password',
       'Please Enter a Password with Minimum Length of 6'
@@ -41,7 +44,6 @@ router.post(
           .status(400)
           .json({ errors: [{ msg: 'User already Exits' }] });
       }
-
       //Get Users Gravatar
       const avatar = gravatar.url(email, {
         s: '200',
