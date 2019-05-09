@@ -1,4 +1,6 @@
 {
   "mongoURI": "mongodb+srv://ashutosh:pinky4336@devconnector-ewcho.mongodb.net/test?retryWrites=true",
-  "jwtSecret": "PwnDev"
+  "jwtSecret": "PwnDev",
+  "githubClientId": "21ec6f9c8b0a32e711ad",
+  "githubSecret": "0d88a044f4fcef295e40374ad4a58269c0532f47"
 }
