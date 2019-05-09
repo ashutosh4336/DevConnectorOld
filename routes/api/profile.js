@@ -149,44 +149,23 @@ router.get('/', async (req, res) => {
 // // @desc   Get User Profile by user_id
 // // @access Public
 
-// router.get('/user/:user_id', async (req, res) => {
-//   try {
-//     const profile = await Profile.findOne({
-//       user: req.params.user_id
-//     }).populate('user', ['name', 'avatar']);
+router.get('/user/:user_id', async (req, res) => {
+  try {
+    const profile = await Profile.findOne({
+      user: req.params.user_id
+    }).populate('user', ['name', 'avatar']);
 
-//     if (!profile) return res.status(400).json({ msg: 'Profile not Found u1' });
+    if (!profile) return res.status(400).json({ msg: 'Profile not Found u1' });
 
-//     res.json(profile);
-//   } catch (err) {
-//     console.error(err.message);
-//     if (err.kind == 'ObjectId') {
-//       return res.status(400).json({ msg: 'Profile Not Found u2' });
-//     }
-//     res.status(500).send('Server Error');
-//   }
-// });
-
-// // @route  GET api/profile/user/:handle
-// // @desc   Get User Profile by handle
-// // @access Public
-// router.get('/handle/:handle', async (req, res) => {
-//   try {
-//     const profile = await Profile.findOne({ user: req.params.handle }).populate(
-//       'user',
-//       ['name', 'avatar']
-//     );
-//     if (!profile) return res.status(400).json({ msg: 'Profile not Found h1' });
-
-//     res.json(profile);
-//   } catch (err) {
-//     console.error(err.message);
-//     if (err.kind == 'ObjectId') {
-//       return res.status(400).json({ msg: 'Profile Not Found u2' });
-//     }
-//     res.status(500).send('Server Error');
-//   }
-// });
+    res.json(profile);
+  } catch (err) {
+    console.error(err.message);
+    if (err.kind == 'ObjectId') {
+      return res.status(400).json({ msg: 'Profile Not Found u2' });
+    }
+    res.status(500).send('Server Error');
+  }
+});
 
 // @route   GET api/profile/handle/:handle
 // @desc    Get profile by handle
@@ -201,34 +180,7 @@ router.get('/handle/:handle', async (req, res) => {
       .then(profile => {
         if (!profile) {
           errors.noprofile = 'There is no profile for this user h1';
-          res.status(404).json(errors);
-        }
-
-        res.json(profile);
-      });
-  } catch (err) {
-    console.error(err.message);
-    if (err.kind == 'ObjectId') {
-      return res.status(400).json({ msg: 'Profile Not Found h2' });
-    }
-    res.status(500).send('Server Error');
-  }
-});
-
-// @route   GET api/profile/user/:user_id
-// @desc    Get profile by user ID
-// @access  Public
-
-router.get('/user/:user_id', async (req, res) => {
-  try {
-    const errors = {};
-
-    Profile.findOne({ user: req.params.user_id })
-      .populate('user', ['name', 'avatar'])
-      .then(profile => {
-        if (!profile) {
-          errors.noprofile = 'There is no profile for this user';
-          res.status(404).json(errors);
+          return res.status(404).json(errors);
         }
 
         res.json(profile);
